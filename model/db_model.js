@@ -6,7 +6,7 @@ export { insertPraise, getPraiseCountByArticleId, getPraiseByUserIdAndArticleId,
 export { getSubset, insertSubset, updateSubset, deleteSubsetById } from './subset.model.js'
 export { getLabel, insertLabel, deleteLabel } from './label.model.js'
 export { getFileCount, getFilePage, moveFileSubset, insertFile, deleteFileById, getFileById } from './file.model.js'
-export { getDiaryPage, deleteDiaryById, insertDiary, updateDiary, getDiaryById } from './diary.model.js'
+export { getDiaryPage, deleteDiaryById, insertDiary, updateDiary, getDiaryById, getDiaryCount } from './diary.model.js'
 
 
 import * as user from './user.model.js'

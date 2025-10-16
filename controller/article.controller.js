@@ -5,9 +5,9 @@ export const getArticlePage = async (req, res) => {
   try {
     let count = undefined
     const { pageSize = 10, nowPage = 1, state = -1, subsetId = -1, serchTerm = '', classify = 0 } = req.body
-    const result = await dbModel.getArticlePage(Number(pageSize), Number(nowPage), Number(state), Number(subsetId), serchTerm, classify)
+    const result = await dbModel.getArticlePage({pageSize: Number(pageSize), nowPage: Number(nowPage), state: Number(state), subsetId: Number(subsetId), serchTerm, classify})
     if (req.body.count) {
-      const countTemp = await dbModel.getArticleCount(Number(state), Number(subsetId), serchTerm, classify)
+      const countTemp = await dbModel.getArticleCount({state: Number(state), subsetId: Number(subsetId), serchTerm, classify})
       count = countTemp[0].count
     }
     if (result.length > 0) {

@@ -47,3 +47,11 @@ export const updateDiary = (id, value) => {
   const sql = 'UPDATE diary SET ? WHERE id = ?;'
   return query(sql, [value, id])
 }
+
+/**
+ * 统计日记数量
+ */
+export const getDiaryCount = () => {
+  const sql = 'SELECT COUNT(*) AS count FROM diary;'
+  return query(sql)
+}

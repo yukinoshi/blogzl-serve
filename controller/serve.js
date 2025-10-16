@@ -7,6 +7,7 @@ import * as subset from './subset.controller.js'
 import * as label from './label.controller.js'
 import * as file from './file.controller.js'
 import * as diary from './diary.controller.js'
+import * as overview from './overview.controller.js'
 
 export default {
   ...user,
@@ -18,4 +19,5 @@ export default {
   ...label,
   ...file,
   ...diary,
+  ...overview,
 }

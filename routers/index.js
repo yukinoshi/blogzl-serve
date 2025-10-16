@@ -129,7 +129,9 @@ export default (app) => {
     serve.getDiaryById(req, res)
   })
 
-
+  app.post('/overview', (req, res) => {
+    serve.getOverview(req, res)
+  })
 }
 
 

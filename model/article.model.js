@@ -4,7 +4,7 @@ const { query } = db
 /** 
  * 分页查询文章/图库列表（支持状态/分类/类别筛选与模糊搜索） 
 */
-export const getArticlePage = (pageSize, nowPage, state, subsetId, serchTerm, classify) => {
+export const getArticlePage = ({pageSize, nowPage, state, subsetId, serchTerm, classify}) => {
   let sql
   const offset = (nowPage - 1) * pageSize
   if (serchTerm) {
@@ -28,7 +28,7 @@ export const getArticlePage = (pageSize, nowPage, state, subsetId, serchTerm, cl
 /** 
  * 统计文章/图库数量（支持状态/分类/类别筛选与模糊搜索）
 */
-export const getArticleCount = (state, subsetId, serchTerm, classify) => {
+export const getArticleCount = ({state, subsetId, serchTerm, classify}) => {
   let sql
   if (serchTerm) {
     const term = `%${serchTerm}%`
