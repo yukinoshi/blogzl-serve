@@ -10,6 +10,20 @@ const __dirname = dirname(__filename)
 
 const app = express()
 app.use(express.json())
+// 仅保护 /files 静态资源需要 token；其他 data 下资源保持公开
+const requireToken = (req, res, next) => {
+  const token = req.headers['authorization']?.split(' ')[1]
+  if (!token) {
+    return res.status(401).send({ code: 300, message: '没有token' })
+  }
+  const valid = jwt.verifyToken(token) === 1
+  if (!valid) {
+    return res.status(300).send({ code: 300, message: '无效或过期的token' })
+  }
+  next()
+}
+// 注意顺序：先挂受保护的 /files，再挂公开的 data 静态
+app.use('/files', requireToken, express.static(join(__dirname, 'data', 'files')))
 app.use(express.static(join(__dirname, 'data')))
 //跨域
 app.use('/',(req, res, next) => {

@@ -39,3 +39,39 @@ export const moveFileSubset = (id, subsetId) => {
   let sql = 'UPDATE file SET subset_id = ? WHERE id = ?;'
   return query(sql, [subsetId, id])
 }
+
+/**
+ * 新建文件
+ */
+export const insertFile = (obj) => {
+  let sql = 'INSERT INTO file SET ?;'
+  return query(sql, obj)
+}
+
+/**
+ * 根据文件id删除文件
+ */
+export const deleteFileById = (id) => {
+  if (typeof id == 'number') {
+    let sql = 'DELETE FROM file WHERE id = ?;'
+    return query(sql, [id])
+  } else if (Array.isArray(id)) {
+    let placeholders = id.map(() => '?').join(', ');
+    let sql = `DELETE FROM file WHERE id IN (${placeholders});`
+    return query(sql, id)
+  }
+}
+
+/**
+ * 根据文件id获取文件
+ */
+export const getFileById = (id) => {
+  if (typeof id == 'number') {
+    let sql = 'SELECT * FROM file WHERE id = ?;'
+    return query(sql, id)
+  } else if (Array.isArray(id)) {
+    let placeholders = id.map(() => '?').join(', ');
+    let sql = `SELECT * FROM file WHERE id IN (${placeholders});`
+    return query(sql, id)
+  }
+}

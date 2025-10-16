@@ -5,7 +5,7 @@ export { getArticlePage, getArticleCount, changeArticleState, insertArticle, del
 export { insertPraise, getPraiseCountByArticleId, getPraiseByUserIdAndArticleId, getPraiseByUserId, deletePraiseByUserId } from './praise.model.js'
 export { getSubset, insertSubset, updateSubset, deleteSubsetById } from './subset.model.js'
 export { getLabel, insertLabel, deleteLabel } from './label.model.js'
-export { getFileCount, getFilePage, moveFileSubset } from './file.model.js'
+export { getFileCount, getFilePage, moveFileSubset, insertFile, deleteFileById, getFileById } from './file.model.js'
 export { getDiaryPage, deleteDiaryById, insertDiary, updateDiary, getDiaryById } from './diary.model.js'
 
 

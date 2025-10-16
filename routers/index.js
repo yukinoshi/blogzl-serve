@@ -1,4 +1,5 @@
 import serve from "../controller/serve.js"
+import {multer} from '../lib/file.js'
 
 export default (app) => {
 
@@ -100,6 +101,14 @@ export default (app) => {
     serve.moveFileSubset(req, res)
   })
 
+  app.post('/deleteFile', (req, res) => {
+    serve.deleteFileById(req, res)
+  })
+
+  app.post('/upload', multer.single('file'), (req, res) => {
+    serve.uploadFile(req, res, multer)
+  })
+
   app.post('/diary', (req, res) => {
     serve.getDiaryPage(req, res)
   })
@@ -119,6 +128,8 @@ export default (app) => {
   app.post('/gainDiary', (req, res) => {
     serve.getDiaryById(req, res)
   })
+
+
 }
 
 
