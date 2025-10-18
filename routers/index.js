@@ -17,6 +17,10 @@ export default (app) => {
     serve.login(req, res)
   })
 
+  app.get('/verify', (req, res) => {
+    serve.verify(req, res)
+  })
+
   app.post('/comment', (req, res) => {
     serve.getCommentPage(req, res)
   })

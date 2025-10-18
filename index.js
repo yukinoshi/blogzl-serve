@@ -16,11 +16,12 @@ const requireToken = (req, res, next) => {
   if (!token) {
     return res.status(401).send({ code: 300, message: '没有token' })
   }
-  const valid = jwt.verifyToken(token) === 1
-  if (!valid) {
-    return res.status(300).send({ code: 300, message: '无效或过期的token' })
+  try {
+    jwt.verifyToken(token)
+    next()
+  } catch (e) {
+    return res.status(401).send({ code: 300, message: '无效或过期的token' })
   }
-  next()
 }
 // 注意顺序：先挂受保护的 /files，再挂公开的 data 静态
 app.use('/files', requireToken, express.static(join(__dirname, 'data', 'files')))
@@ -36,18 +37,19 @@ app.use('/',(req, res, next) => {
 
 // 统一验证token的中间件
 app.use((req, res, next) => {
-  if (req.path === '/login' || req.path === '/insertUser' || req.path === '/isRegister') {
+  if (req.path === '/login' || req.path === '/insertUser' || req.path === '/isRegister' || req.path === '/verify') {
     return next() // 登录和注册接口不需要验证token
   }
   const token = req.headers['authorization']?.split(' ')[1] // 获取Bearer token
   if (!token) {
     return res.status(401).send({ code: 300, message: '没有token' })
   }
-  const valid = jwt.verifyToken(token) === 1 ? true : false;
-  if (!valid) {
-    return res.status(300).send({ code: 300, message: '无效或过期的token' })
+  try {
+    jwt.verifyToken(token)
+    next()
+  } catch (e) {
+    return res.status(401).send({ code: 300, message: '无效或过期的token' })
   }
-  next()
 })
 
 

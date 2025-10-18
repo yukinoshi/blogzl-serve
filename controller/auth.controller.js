@@ -31,7 +31,7 @@ export const insertUser = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const result = await dbModel.login(req.body)
-    if (result.length === 0) return res.send({ code: 400 })
+    if (result.length === 0) return res.send({ code: 400 })//没有该用户
     const user = result[0]
     const match = await hash.comparePassword(req.body.password || '', user.password)
 
@@ -50,5 +50,32 @@ export const login = async (req, res) => {
   } catch (error) {
     console.error('login error:', error)
     res.send({ code: 500, message: '登录失败' })
+  }
+}
+
+/** 校验token */
+export const verify = async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1]
+  if (!token) {
+    return res.status(401).send({ code: 401, message: 'No token provided' })
+  }
+  try {
+    const decoded = jwt.verifyToken(token)
+    const result = await dbModel.getUserById({ id: decoded.id })
+    if (result.length === 0) {
+      return res.status(401).send({ code: 401, message: 'User not found' })
+    }
+    const user = result[0]
+    res.send({
+      code: 200,
+      data: {
+        ...user,
+        password: undefined,
+      }
+    })
+  } catch (error) {
+    const isExpired = error && error.name === 'TokenExpiredError'
+    console.error('verify token error:', error?.message || error)
+    return res.status(401).send({ code: 401, message: isExpired ? 'Token expired' : 'Invalid token' })
   }
 }

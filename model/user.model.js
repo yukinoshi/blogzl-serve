@@ -18,3 +18,10 @@ export const login = (value) => {
   const name = value && value.name ? value.name : ''
   return query(sql, [name])
 }
+
+/** 按用户ID查询用户记录 */
+export const getUserById = (value) => {
+  let sql = 'SELECT * FROM users WHERE id = ?;'
+  const id = value && value.id ? value.id : ''
+  return query(sql, [id])
+}
