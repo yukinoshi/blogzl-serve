@@ -16,7 +16,7 @@ export const getOverview = async (req, res) => {
       fileSize = (file/1024/1024).toFixed(2) + 'MB';
     }
     const data = {
-      articlecount: articlecount[0].count,
+      article: articlecount[0].count,
       gallery: gallery[0].count,
       file: fileSize,
       diary: diary[0].count
