@@ -36,3 +36,11 @@ export const getArticleTitleById = (id) => {
   let sql = 'SELECT title FROM article WHERE id = ?;'
   return query(sql, [id])
 }
+
+/**
+ * 根据id删除评论
+*/
+export const deleteCommentById = (id) => {
+  let sql = 'DELETE FROM comment WHERE id = ?;'
+  return query(sql, [id])
+}

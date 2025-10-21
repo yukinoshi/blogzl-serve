@@ -17,8 +17,9 @@ export const getArticlePage = async (req, res) => {
         item.praise = praise[0].count
         const comment = await dbModel.commentCount(id)
         item.comment = comment[0].count
+        //如果解析出来的是[科普,测试]就不查询 如果是数字数组[1,2]就进行转换成为字符数组
         const label = item.label ? JSON.parse(item.label) : []
-        if (label.length > 0) {
+        if (typeof label[0] === 'number') {
           const labelNames = []
           for (const labelId of label) {
             const labelTemp = await dbModel.getLabel(labelId)
@@ -28,7 +29,7 @@ export const getArticlePage = async (req, res) => {
           }
           item.label = labelNames
         } else {
-          item.label = []
+          item.label = label
         }
       }
     }

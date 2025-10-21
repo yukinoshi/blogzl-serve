@@ -37,9 +37,6 @@ export const getArticleCount = ({state, subsetId, serchTerm, classify}) => {
   } else if (subsetId > -1 && typeof subsetId === 'number') {
     sql = 'SELECT COUNT(*) AS count FROM article WHERE subset_id = ? AND classify = ?;'
     return query(sql, [subsetId, classify])
-  } else if (typeof subsetId === 'string') {
-    sql = 'SELECT COUNT(*) AS count FROM article WHERE subset_id = ? AND classify = ?;'
-    return query(sql, [subsetId, classify])
   } else if (state > -1) {
     sql = 'SELECT COUNT(*) AS count FROM article WHERE state = ? AND classify = 0;'
     return query(sql, [state])

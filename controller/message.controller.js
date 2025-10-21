@@ -24,3 +24,30 @@ export const getMessagePage = async (req, res) => {
     res.send({ code: 500, message: '获取私信失败' })
   }
 }
+
+/**
+ * 删除私信
+ */
+export const deleteMessageById = async (req, res) => {
+  try {
+    const { id } = req.body
+    await dbModel.deleteMessageById(id)
+    res.send({ code: 200 })
+  } catch (error) {
+    console.error('deleteMessageById error:', error)
+    res.send({ code: 500, message: '删除私信失败' })
+  }
+}
+
+/**
+ * 获取未读的私信数量
+ */
+export const getUnreadMessageCount = async (req, res) => {
+  try {
+    const result = await dbModel.getUnreadMessageCount()
+    res.send({ code: 200, data: { count: result[0].count } })
+  } catch (error) {
+    console.error('getUnreadMessageCount error:', error)
+    res.send({ code: 500, message: '获取未读私信数量失败' })
+  }
+}

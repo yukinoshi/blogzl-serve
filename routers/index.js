@@ -1,5 +1,5 @@
 import serve from "../controller/serve.js"
-import {multer} from '../lib/file.js'
+import { multer } from '../lib/file.js'
 
 export default (app) => {
 
@@ -25,12 +25,24 @@ export default (app) => {
     serve.getCommentPage(req, res)
   })
 
+  app.post('/deletecomment', (req, res) => {
+    serve.deleteCommentById(req, res)
+  })
+
   app.post('/commentCount', (req, res) => {
     serve.commentCount(req, res)
   })
 
   app.post('/message', (req, res) => {
     serve.getMessagePage(req, res)
+  })
+
+  app.post('/getUnreadMessageCount', (req, res) => {
+    serve.getUnreadMessageCount(req, res)
+  })
+
+  app.post('/deleteMessage', (req, res) => {
+    serve.deleteMessageById(req, res)
   })
 
   app.post('/article', (req, res) => {
@@ -101,6 +113,11 @@ export default (app) => {
     serve.getFilePage(req, res)
   })
 
+  app.post('/upload', multer.single('file'), (req, res) => {
+    serve.uploadFile(req, res, multer)
+  })
+
+
   app.post('/removeFile', (req, res) => {
     serve.moveFileSubset(req, res)
   })
@@ -109,9 +126,6 @@ export default (app) => {
     serve.deleteFileById(req, res)
   })
 
-  app.post('/upload', multer.single('file'), (req, res) => {
-    serve.uploadFile(req, res, multer)
-  })
 
   app.post('/diary', (req, res) => {
     serve.getDiaryPage(req, res)

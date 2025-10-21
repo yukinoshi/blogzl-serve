@@ -14,7 +14,7 @@ export const getSubset = async (req, res) => {
       }
     } else {
       for (const item in result) {
-        const value = await dbModel.getArticleCount(-1, result[item].id, '', classify)
+        const value = await dbModel.getArticleCount({ state: -1, subsetId: result[item].id, serchTerm: '', classify })
         result[item].value = value[0].count
       }
     }
