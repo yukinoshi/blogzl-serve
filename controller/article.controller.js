@@ -1,5 +1,13 @@
 import dbModel from '../model/db_model.js'
 
+// 规范化标签：确保写库时始终为 JSON 字符串数组
+const normalizeLabel = (label) => {
+  if (Array.isArray(label)) return JSON.stringify(label)
+  if (label === undefined || label === null) return null
+  // 单个字符串时包装为数组再序列化
+  return JSON.stringify([label])
+}
+
 /** 获取文章或者图库分页 */
 export const getArticlePage = async (req, res) => {
   try {
@@ -17,8 +25,12 @@ export const getArticlePage = async (req, res) => {
         item.praise = praise[0].count
         const comment = await dbModel.commentCount(id)
         item.comment = comment[0].count
+        // 解析标签：容错历史非 JSON 数据，降级为 [label]
+        let label = []
+        if (item.label) {
+          try { label = JSON.parse(item.label) } catch { label = [item.label] }
+        }
         //如果解析出来的是[科普,测试]就不查询 如果是数字数组[1,2]就进行转换成为字符数组
-        const label = item.label ? JSON.parse(item.label) : []
         if (typeof label[0] === 'number') {
           const labelNames = []
           for (const labelId of label) {
@@ -107,7 +119,16 @@ export const updateArticleById = async (req, res) => {
     const { id, value: { title, subset_id, label, introduce, content, cover, state } } = req.body
     if (id == undefined)
       return res.send({ code: 400, message: 'updateArticleById参数错误' })
-    await dbModel.updateArticleById(Number(id), { title, subset_id, label, introduce, content, cover, state })
+    const data = { 
+      title, 
+      subset_id, 
+      label: normalizeLabel(label), 
+      introduce, 
+      content, 
+      cover, 
+      state 
+    }
+    await dbModel.updateArticleById(Number(id), data)
     res.send({ code: 200 })
   } catch (error) {
     console.error('updateArticleById error:', error)
@@ -123,7 +144,18 @@ export const insertArticle = async (req, res) => {
     const { value: { title, subset_id, classify, label, introduce, content, cover, state = 0, moment } } = req.body
     if (title == undefined || moment == undefined || classify == undefined)
       return res.send({ code: 400, message: 'insertArticle参数错误' })
-    const result = await dbModel.insertArticle({ title, subset_id, classify, label, introduce, content, cover, state, moment })
+    const data = { 
+      title, 
+      subset_id, 
+      classify, 
+      label: normalizeLabel(label), 
+      introduce, 
+      content, 
+      cover, 
+      state, 
+      moment 
+    }
+    const result = await dbModel.insertArticle(data)
     res.send({ code: 200, data: result.insertId })
   } catch (error) {
     console.error('insertArticle error:', error)
