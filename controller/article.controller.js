@@ -101,6 +101,12 @@ export const getArticleById = async (req, res) => {
     const { articleId } = req.body
     const result = await dbModel.getArticleById(Number(articleId))
     if (result.length > 0) {
+      // 兼容旧数据，如果解析失败则保持原样（可能是单个字符串）
+      try {
+        result[0].label = JSON.parse(result[0].label)
+      } catch {
+        result[0].label = [result[0].label]
+      }
       res.send({ code: 200, data: result[0] })
     } else {
       res.send({ code: 404, message: '文章不存在' })
@@ -141,7 +147,7 @@ export const updateArticleById = async (req, res) => {
  */
 export const insertArticle = async (req, res) => {
   try {
-    const { value: { title, subset_id, classify, label, introduce, content, cover, state = 0, moment } } = req.body
+    const { value: { title, subset_id, classify, label, introduce, content, cover, state, moment } } = req.body
     if (title == undefined || moment == undefined || classify == undefined)
       return res.send({ code: 400, message: 'insertArticle参数错误' })
     const data = { 
