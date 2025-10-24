@@ -49,6 +49,14 @@ export default (app) => {
     serve.getArticlePage(req, res)
   })
 
+  app.post('/allarticle', (req, res) => {
+    serve.getAllarticle(req, res)
+  })
+
+  app.post('/allarticleby', (req, res) => {
+    serve.getAllarticleby(req, res)
+  })
+
   app.post('/changeArticleState', (req, res) => {
     serve.changeArticleState(req, res)
   })
@@ -95,6 +103,10 @@ export default (app) => {
 
   app.post('/deleteSubset', (req, res) => {
     serve.deleteSubset(req, res)
+  })
+
+  app.post('/gainSubset', (req, res) => {
+    serve.getSubsetById(req, res)
   })
 
   app.post('/label', (req, res) => {

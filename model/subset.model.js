@@ -24,3 +24,9 @@ export const deleteSubsetById = (id) => {
   let sql = 'DELETE FROM subset WHERE id = ?;'
   return query(sql, [id])
 }
+
+///** 根据ID获取分类信息 */
+export const getSubsetById = (id) => {
+  let sql = 'SELECT * FROM subset WHERE id = ?;'
+  return query(sql, [id])
+}

@@ -66,3 +66,20 @@ export const deleteSubset = async (req, res) => {
     res.send({ code: 500, message: '删除分类失败' })
   }
 }
+/** 根据subsetID获取分类信息 */
+export const getSubsetById = async (req, res) => {
+  try {
+    const { value } = req.body
+    //value是一个对象数组 [{id:1,count:2},{id:2,count:1}]
+    const result = []
+    for (const item of value) {
+      const res = await dbModel.getSubsetById(item.id)
+      res[0].value = item.count
+      result.push(...res)
+    }
+    res.send({ code: 200, data: { count: result.length, list: result } })
+  } catch (error) {
+    console.error('getSubsetById error:', error)
+    res.send({ code: 500, message: '获取分类失败' })
+  }
+}
