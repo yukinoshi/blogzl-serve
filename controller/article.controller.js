@@ -12,14 +12,16 @@ const normalizeLabel = (label) => {
 export const getArticlePage = async (req, res) => {
   try {
     let count = undefined, countUnpublish = undefined
-    const { pageSize = 10, nowPage = 1, state = -1, subsetId = -1, serchTerm = '', classify = 0 } = req.body
+    const { pageSize = 10, nowPage = 1, state = -1, subsetId = -2, serchTerm = '', classify = 0 } = req.body
     const result = await dbModel.getArticlePage({ pageSize: Number(pageSize), nowPage: Number(nowPage), state: Number(state), subsetId: Number(subsetId), serchTerm, classify })
     if (req.body.count) {
       const countTemp = await dbModel.getArticleCount({ state: Number(state), subsetId: Number(subsetId), serchTerm, classify })
       count = countTemp[0].count
-      //没有发布的文章数量
-      const unpublishTemp = await dbModel.getArticleCount({ state: 0, subsetId: Number(subsetId), serchTerm, classify })
-      countUnpublish = unpublishTemp[0].count
+      if (classify === 0) {
+        //没有发布的文章数量
+        const unpublishTemp = await dbModel.getArticleCount({ state: 0, subsetId: Number(subsetId), serchTerm, classify })
+        countUnpublish = unpublishTemp[0].count
+      }
     }
     if (result.length > 0) {
       for (const item of result) {
@@ -96,7 +98,7 @@ export const getAllarticle = async (req, res) => {
 /** 根据分类关键词状态类别获取全部文章/图库列表 */
 export const getAllarticleby = async (req, res) => {
   try {
-    const { state= -1, subsetId= -1, serchTerm= '', classify= 0 } = req.body
+    const { state = -1, subsetId = -2, serchTerm = '', classify = 0 } = req.body
     const result = await dbModel.getAllArticleby({ state: Number(state), subsetId: Number(subsetId), serchTerm, classify })
     if (result.length > 0) {
       for (const item of result) {

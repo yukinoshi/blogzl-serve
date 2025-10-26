@@ -129,7 +129,6 @@ export default (app) => {
     serve.uploadFile(req, res, multer)
   })
 
-
   app.post('/removeFile', (req, res) => {
     serve.moveFileSubset(req, res)
   })

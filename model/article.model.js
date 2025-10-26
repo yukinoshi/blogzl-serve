@@ -37,6 +37,7 @@ export const getArticlePage = ({ pageSize, nowPage, state, subsetId, serchTerm, 
     sql = 'SELECT * FROM article WHERE subset_id IS NULL AND classify = ? ORDER BY id DESC LIMIT ?, ?;'
     return query(sql, [classify, offset, pageSize])
   }
+  
   sql = 'SELECT * FROM article WHERE classify = ? ORDER BY id DESC LIMIT ?, ?;'
   return query(sql, [classify, offset, pageSize])
 }
@@ -58,10 +59,6 @@ export const getAllArticleby = ({ state, subsetId, serchTerm, classify }) => {
     return query(sql, [term, term, classify])
   }
   if (subsetId > -1) {
-    sql = 'SELECT * FROM article WHERE subset_id = ? AND classify = ? ORDER BY id DESC;'
-    return query(sql, [subsetId, classify])
-  }
-  if (typeof subsetId === 'string') {
     sql = 'SELECT * FROM article WHERE subset_id = ? AND classify = ? ORDER BY id DESC;'
     return query(sql, [subsetId, classify])
   }
