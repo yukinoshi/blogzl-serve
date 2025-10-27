@@ -9,7 +9,8 @@ export const getDiaryPage = async (req, res) => {
     const { pageSize = 10, nowPage = 1, serchTerm = '' } = req.body
     const result = await dbModel.getDiaryPage(Number(pageSize), Number(nowPage), serchTerm)
     if (req.body.count) {
-      count = result.length;
+      const countTemp = await dbModel.getDiaryCount(serchTerm)
+      count = countTemp[0].count
     }
     if (result.length > 0) {
       for (const item of result) {

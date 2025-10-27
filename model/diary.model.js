@@ -51,7 +51,13 @@ export const updateDiary = (id, value) => {
 /**
  * 统计日记数量
  */
-export const getDiaryCount = () => {
-  const sql = 'SELECT COUNT(*) AS count FROM diary;'
+export const getDiaryCount = (serchTerm) => {
+  let sql = '';
+  if (serchTerm) {
+    const term = `%${serchTerm}%`
+    sql = 'SELECT COUNT(*) AS count FROM diary WHERE (title LIKE ? OR `content` LIKE ?);'
+    return query(sql, [term, term])
+  }
+  sql = 'SELECT COUNT(*) AS count FROM diary;'
   return query(sql)
 }

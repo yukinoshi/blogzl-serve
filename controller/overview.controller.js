@@ -7,7 +7,7 @@ export const getOverview = async (req, res) => {
   try {
     const articlecount = await dbModel.getArticleCount({classify: 0});
     const gallery = await dbModel.getArticleCount({classify: 1});
-    const file = await calculateDirectorySize(process.cwd() + '/data');
+    const file = await calculateDirectorySize(process.cwd() + '/data/files');
     const diary = await dbModel.getDiaryCount();
     let fileSize = '';
     if((file/1024/1024)<1) {//如果数据小于1MB
