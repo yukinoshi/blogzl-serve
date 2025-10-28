@@ -137,7 +137,6 @@ export default (app) => {
     serve.deleteFileById(req, res)
   })
 
-
   app.post('/diary', (req, res) => {
     serve.getDiaryPage(req, res)
   })

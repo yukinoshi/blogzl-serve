@@ -12,6 +12,9 @@ export const getFileCount = (subsetId) => {
   } else if (typeof subsetId == 'string') {
     sql = 'SELECT COUNT(*) AS count FROM file WHERE subset_id = ?;'
     return query(sql, [subsetId])
+  } else if (subsetId === -1) {
+    sql = 'SELECT COUNT(*) AS count FROM file WHERE subset_id IS NULL;'
+    return query(sql)
   }
   sql = 'SELECT COUNT(*) AS count FROM file;'
   return query(sql)
@@ -29,6 +32,9 @@ export const getFilePage = (pageSize, nowPage, subsetId) => {
   } else if (typeof subsetId == 'string') {
     sql = 'SELECT * FROM file WHERE subset_id = ? ORDER BY id DESC LIMIT ?, ?;'
     return query(sql, [subsetId, offset, pageSize])
+  } else if (subsetId === -1) {
+    sql = 'SELECT * FROM file WHERE subset_id IS NULL ORDER BY id DESC LIMIT ?, ?;'
+    return query(sql, [offset, pageSize])
   }
   sql = 'SELECT * FROM file ORDER BY id DESC LIMIT ?, ?;'
   return query(sql, [offset, pageSize])
