@@ -37,7 +37,7 @@ app.use('/', (req, res, next) => {
 
 // 统一验证token的中间件
 app.use((req, res, next) => {
-  if (req.path === '/login' || req.path === '/insertUser' || req.path === '/isRegister' || req.path === '/verify') {
+  if (req.path === '/login' || req.path === '/insertUser' || req.path === '/isRegister' || req.path === '/verify' || req.path === '/visits' || req.path === '/survey' || req.path === '/recordVisit') {
     return next() // 登录和注册接口不需要验证token
   }
   // 优先从 Authorization Bearer 读取；其次支持自定义头 X-Token；最后支持 query.token（便于上传组件通过 URL 携带）

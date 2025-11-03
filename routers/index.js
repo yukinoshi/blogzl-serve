@@ -160,6 +160,14 @@ export default (app) => {
   app.post('/overview', (req, res) => {
     serve.getOverview(req, res)
   })
+
+  app.post('/visits', (req, res) => {
+    serve.getVisits(req, res)
+  })
+
+  app.post('/recordVisit', (req, res) => {
+    serve.recordVisit(req, res)
+  })
 }
 
 
