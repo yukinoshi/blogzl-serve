@@ -168,6 +168,10 @@ export default (app) => {
   app.post('/recordVisit', (req, res) => {
     serve.recordVisit(req, res)
   })
+
+  app.post('/banner', (req, res) => {
+    serve.getBannerImages(req, res)
+  })
 }
 
 

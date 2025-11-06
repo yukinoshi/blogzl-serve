@@ -9,11 +9,13 @@ import * as file from './file.controller.js'
 import * as diary from './diary.controller.js'
 import * as overview from './overview.controller.js'
 import * as visits from './visits.controller.js'
+import * as banner from './banner.controller.js'
 
 export default {
   ...user,
   ...comment,
   ...message,
+  ...banner,
   ...articl,
   ...praise,
   ...subset,
