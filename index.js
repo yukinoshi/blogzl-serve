@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import router from './routers/index.js'
 import jwt from './lib/jwt.js'
+import publicRoutes from './config/public-routes.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -37,8 +38,9 @@ app.use('/', (req, res, next) => {
 
 // 统一验证token的中间件
 app.use((req, res, next) => {
-  if (req.path === '/login' || req.path === '/insertUser' || req.path === '/isRegister' || req.path === '/verify' || req.path === '/visits' || req.path === '/survey' || req.path === '/recordVisit' || req.path === '/banner') {
-    return next() // 登录和注册接口不需要验证token
+  // 读取配置文件的白名单路由，不需要 token
+  if (publicRoutes.includes(req.path)) {
+    return next()
   }
   // 优先从 Authorization Bearer 读取；其次支持自定义头 X-Token；最后支持 query.token（便于上传组件通过 URL 携带）
   const authHeader = req.headers['authorization'] || req.headers['Authorization']
