@@ -44,3 +44,27 @@ export const deleteCommentById = (id) => {
   let sql = 'DELETE FROM comment WHERE id = ?;'
   return query(sql, [id])
 }
+
+/**
+ * 根据文章id获取评论信息
+ */
+export const getCommentsByArticleId = (articleId) => {
+  let sql = 'SELECT * FROM comment WHERE article_id = ?;'
+  return query(sql, [articleId])
+}
+
+/**
+ * 根据评论id点赞评论
+ */
+export const likeCommentById = (id) => {
+  let sql = 'UPDATE comment SET likes = likes + 1 WHERE id = ?;'
+  return query(sql, [id])
+}
+
+/**
+ * 新增评论
+ */
+export const insertComment = (obj) => {
+  let sql = 'INSERT INTO comment SET ?;'
+  return query(sql, obj)
+}

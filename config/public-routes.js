@@ -11,5 +11,11 @@ export default [
   '/banner',
   '/article',
   '/gainArticle',
+  '/addPraise',
+  '/deletePraise',
   '/gainSubset',
+  '/getcomment',
+  '/likecomment',
+  '/addcomment',
+  '/deletelikecomment'
 ]

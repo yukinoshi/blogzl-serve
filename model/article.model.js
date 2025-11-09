@@ -133,3 +133,10 @@ export const updateArticleById = (id, data) => {
   let sql = 'UPDATE article SET ? WHERE id = ?;'
   return query(sql, [data, id])
 }
+/**
+ * 更新文章的浏览量
+ */
+export const updateArticleViewsById = (id) => {
+  let sql = 'UPDATE article SET views = views + 1 WHERE id = ?;'
+  return query(sql, [id])
+}

@@ -33,6 +33,22 @@ export default (app) => {
     serve.commentCount(req, res)
   })
 
+  app.post('/getcomment', (req, res) => {
+    serve.getCommentsByArticleId(req, res)
+  })
+
+  app.post('/likecomment', (req, res) => {
+    serve.insertPraiseComment(req, res)
+  })
+
+  app.post('/deletelikecomment', (req, res) => {
+    serve.deleteCommentPraiseByUserId(req, res)
+  })
+
+  app.post('/addcomment', (req, res) => {
+    serve.submitComment(req, res)
+  })
+
   app.post('/message', (req, res) => {
     serve.getMessagePage(req, res)
   })

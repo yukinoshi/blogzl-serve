@@ -182,15 +182,26 @@ export const getArticleByState = async (req, res) => {
  */
 export const getArticleById = async (req, res) => {
   try {
-    const { articleId } = req.body
+    const { articleId, fingerprint } = req.body
     const result = await dbModel.getArticleById(Number(articleId))
+
     if (result.length > 0) {
+      const comment = await dbModel.commentCount(articleId)
+      result[0].comment = comment[0].count
+      const praise = await dbModel.getPraiseCountByArticleId(articleId)
+      result[0].praise = praise[0].count
+      if (fingerprint) { //查询用户是否点赞
+        const userPraise = await dbModel.getPraiseByUserIdAndArticleId(fingerprint, articleId)
+        result[0].isPraise = userPraise.length > 0
+      }
       // 兼容旧数据，如果解析失败则保持原样（可能是单个字符串）
       try {
         result[0].label = JSON.parse(result[0].label)
       } catch {
         result[0].label = [result[0].label]
       }
+      //观看views+1
+      await dbModel.updateArticleViewsById(Number(articleId))
       res.send({ code: 200, data: result[0] })
     } else {
       res.send({ code: 404, message: '文章不存在' })
