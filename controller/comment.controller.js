@@ -90,14 +90,14 @@ export const getCommentsByArticleId = async (req, res) => {
 export const submitComment = async (req, res) => {
   try {
     const { userId = -1, userName = '游客', articleId, moment, content } = req.body
-    await dbModel.insertComment({
+    const result = await dbModel.insertComment({
       user_id: Number(userId),
       user_name: userName,
       article_id: Number(articleId),
       moment,
       content
     })
-    res.send({ code: 200 })
+    res.send({ code: 200, data: result.insertId})
   } catch (error) {
     console.error('submitComment error:', error)
     res.send({ code: 500, message: '新增评论失败' })
