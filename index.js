@@ -24,8 +24,9 @@ const app = express()
 // }
 
 app.use(express.json())
-// 静态资源：/files 公开可访问，其余 data 下资源也公开
+// 静态资源：/files 与 /weather 都公开可访问；其余 data 下资源也公开
 app.use('/files', express.static(join(__dirname, 'data', 'files')))
+app.use('/weather', express.static(join(__dirname, 'data', 'weather')))
 app.use(express.static(join(__dirname, 'data')))
 //跨域
 app.use('/', (req, res, next) => {

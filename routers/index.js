@@ -173,6 +173,10 @@ export default (app) => {
     serve.getDiaryById(req, res)
   })
 
+  app.post('/gainDiaryDate', (req, res) => {
+    serve.getDiaryByDate(req, res)
+  })
+
   app.post('/overview', (req, res) => {
     serve.getOverview(req, res)
   })

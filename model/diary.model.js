@@ -61,3 +61,17 @@ export const getDiaryCount = (serchTerm) => {
   sql = 'SELECT COUNT(*) AS count FROM diary;'
   return query(sql)
 }
+
+/**
+ * 根据年月日期获取日记信息
+ */
+export const getDiaryByDate = (year, month, day) => {
+  let sql = '';
+  if (day) {
+    sql = 'SELECT * FROM diary WHERE YEAR(moment) = ? AND MONTH(moment) = ? AND DAY(moment) = ? ORDER BY moment DESC;'
+    return query(sql, [year, month, day])
+  } else {
+    sql = 'SELECT * FROM diary WHERE YEAR(moment) = ? AND MONTH(moment) = ? ORDER BY moment DESC;'
+    return query(sql, [year, month])
+  }
+}

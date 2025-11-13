@@ -17,5 +17,8 @@ export default [
   '/getcomment',
   '/likecomment',
   '/addcomment',
-  '/deletelikecomment'
+  '/deletelikecomment',
+  '/diary',
+  '/gainDiary',
+  '/gainDiaryDate',
 ]

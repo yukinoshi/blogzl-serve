@@ -84,3 +84,17 @@ export const getDiaryById = async (req, res) => {
     res.send({ code: 500, message: '获取日记失败' })
   }
 }
+
+/**
+ * 根据年月日期获取日记列表
+ */
+export const getDiaryByDate = async (req, res) => {
+  try {
+    const { year, month, day } = req.body
+    const result = await dbModel.getDiaryByDate(year, month, day)
+    res.send({ code: 200, data: result })
+  } catch (error) {
+    console.error('getDiaryByDate error:', error)
+    res.send({ code: 500, message: '获取日记失败' })
+  }
+}
