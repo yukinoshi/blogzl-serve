@@ -61,6 +61,10 @@ export default (app) => {
     serve.deleteMessageById(req, res)
   })
 
+  app.post('/sendMessage', (req, res) => {
+    serve.sendMessage(req, res)
+  })
+
   app.post('/article', (req, res) => {
     serve.getArticlePage(req, res)
   })

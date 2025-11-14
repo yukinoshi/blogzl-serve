@@ -51,3 +51,17 @@ export const getUnreadMessageCount = async (req, res) => {
     res.send({ code: 500, message: '获取未读私信数量失败' })
   }
 }
+
+/**
+ * 发送私信反馈
+ */
+export const sendMessage = async (req, res) => {
+  try {
+    const { userName, userId = -1, content, moment, userType } = req.body
+    await dbModel.insertMessage({ user_name: userName, user_id: userId, content, moment, user_type: userType })
+    res.send({ code: 200 })
+  } catch (error) {
+    console.error('sendMessage error:', error)
+    res.send({ code: 500, message: '发送私信失败' })
+  }
+}

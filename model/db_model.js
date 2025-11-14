@@ -1,6 +1,6 @@
 export { isRegister, insertUser, login } from './user.model.js'
 export { getCommentPage, commentCount, commentIsread, getArticleTitleById, deleteCommentById, insertComment } from './comment.model.js'
-export { getMessagePage, getMessageCount, messageIsread, deleteMessageById, getUnreadMessageCount } from './message.model.js'
+export { getMessagePage, getMessageCount, messageIsread, deleteMessageById, getUnreadMessageCount, insertMessage } from './message.model.js'
 export { getArticlePage, getAllarticle, getAllArticleby, getArticleCount, changeArticleState, insertArticle, deleteArticleById, getArticleById, updateArticleById } from './article.model.js'
 export { insertPraise, getPraiseCountByArticleId, getPraiseByUserIdAndArticleId, getPraiseByUserId, deletePraiseByUserId, insertPraiseComment, getPraiseCountByCommentId, getCommentPraiseByUserId, deleteCommentPraiseByUserId, getPraiseByUserIdAndCommentId } from './praise.model.js'
 export { getSubset, insertSubset, updateSubset, deleteSubsetById, getSubsetById } from './subset.model.js'

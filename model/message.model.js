@@ -30,3 +30,9 @@ export const deleteMessageById = (id) => {
   let sql = 'DELETE FROM message WHERE id = ?;'
   return query(sql, [id])
 }
+
+/** 插入新的留言/消息 */
+export const insertMessage = ({ user_name, user_id, content, moment, user_type }) => {
+  let sql = 'INSERT INTO message (user_name, user_id, content, moment, user_type, isread) VALUES (?, ?, ?, ?, ?, 0);'
+  return query(sql, [user_name, user_id, content, moment, user_type])
+}
