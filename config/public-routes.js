@@ -13,6 +13,7 @@ export default [
   '/gainArticle',
   '/addPraise',
   '/deletePraise',
+  '/subset',
   '/gainSubset',
   '/getcomment',
   '/likecomment',
