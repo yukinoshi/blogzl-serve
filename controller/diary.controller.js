@@ -21,7 +21,7 @@ export const getDiaryPage = async (req, res) => {
     res.send({ code: 200, data: { count, list: result } })
   } catch (error) {
     console.error('getDiaryPage error:', error)
-    res.send({ code: 500, message: '获取日记失败' })
+    res.send({ code: 500, data: '获取日记失败' })
   }
 }
 
@@ -35,7 +35,7 @@ export const deleteDiary = async (req, res) => {
     res.send({ code: 200 })
   } catch (error) {
     console.error('deleteDiary error:', error)
-    res.send({ code: 500, message: '删除失败' })
+    res.send({ code: 500, data: '删除失败' })
   }
 }
 
@@ -51,7 +51,7 @@ export const insertDiary = async (req, res) => {
     res.send({ code: 200, data: result.insertId })
   } catch (error) {
     console.error('insertDiary error:', error)
-    res.send({ code: 500, message: '新增失败' })
+    res.send({ code: 500, data: '新增失败' })
   }
 }
 
@@ -67,7 +67,7 @@ export const updateDiary = async (req, res) => {
     res.send({ code: 200 })
   } catch (error) {
     console.error('updateDiary error:', error)
-    res.send({ code: 500, message: '修改失败' })
+    res.send({ code: 500, data: '修改失败' })
   }
 }
 
@@ -81,7 +81,7 @@ export const getDiaryById = async (req, res) => {
     res.send({ code: 200, data: result.length > 0 ? result[0] : {} })
   } catch (error) {
     console.error('getDiaryById error:', error)
-    res.send({ code: 500, message: '获取日记失败' })
+    res.send({ code: 500, data: '获取日记失败' })
   }
 }
 
@@ -95,6 +95,6 @@ export const getDiaryByDate = async (req, res) => {
     res.send({ code: 200, data: result })
   } catch (error) {
     console.error('getDiaryByDate error:', error)
-    res.send({ code: 500, message: '获取日记失败' })
+    res.send({ code: 500, data: '获取日记失败' })
   }
 }
