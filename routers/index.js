@@ -196,6 +196,22 @@ export default (app) => {
   app.post('/banner', (req, res) => {
     serve.getBannerImages(req, res)
   })
+
+  app.post('/resource', (req, res) => {
+    serve.getResourcePage(req, res)
+  })
+
+  app.post('/deleteresource', (req, res) => {
+    serve.deleteResourceById(req, res)
+  })
+
+  app.post('/gainresource', (req, res) => {
+    serve.getResourceById(req, res)
+  })
+
+  app.post('/insertresource', (req, res) => {
+    serve.insertResource(req, res)
+  })
 }
 
 

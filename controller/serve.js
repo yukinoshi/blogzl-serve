@@ -10,6 +10,7 @@ import * as diary from './diary.controller.js'
 import * as overview from './overview.controller.js'
 import * as visits from './visits.controller.js'
 import * as banner from './banner.controller.js'
+import * as resource from './resource.controller.js'
 
 export default {
   ...user,
@@ -24,4 +25,5 @@ export default {
   ...diary,
   ...overview,
   ...visits,
+  ...resource,
 }

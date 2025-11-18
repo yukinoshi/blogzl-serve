@@ -9,6 +9,7 @@ export { getFileCount, getFilePage, moveFileSubset, insertFile, deleteFileById, 
 export { getDiaryPage, deleteDiaryById, insertDiary, updateDiary, getDiaryById, getDiaryCount } from './diary.model.js'
 export { insertVisit, getVisitCount } from './visits.model.js'
 export { getBannerImages } from './bannerimage.model.js'
+export { getResourcePage, getResourceCount, deleteResourceById, getResourceById, insertResource, updateResourceById } from './resource.model.js'
 
 import * as user from './user.model.js'
 import * as comment from './comment.model.js'
@@ -21,6 +22,7 @@ import * as file from './file.model.js'
 import * as diary from './diary.model.js'
 import * as visits from './visits.model.js'
 import * as banner from './bannerimage.model.js'
+import * as resource from './resource.model.js'
 
 
 export default {
@@ -34,5 +36,6 @@ export default {
   ...file,
   ...diary,
   ...visits,
-  ...banner
+  ...banner,
+  ...resource,
 }

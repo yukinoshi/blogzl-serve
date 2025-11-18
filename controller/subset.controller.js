@@ -12,6 +12,11 @@ export const getSubset = async (req, res) => {
         const value = await dbModel.getFileCount(result[item].id)
         result[item].value = value[0].count
       }
+    } else if (classify === 3) {
+      for (const item in result) {
+        const value = await dbModel.getResourceCount(result[item].id)
+        result[item].value = value[0].count
+      }
     } else {
       for (const item in result) {
         const value = await dbModel.getArticleCount({ state: -1, subsetId: result[item].id, serchTerm: '', classify })

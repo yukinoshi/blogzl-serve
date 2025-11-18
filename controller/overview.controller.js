@@ -9,6 +9,7 @@ export const getOverview = async (req, res) => {
     const gallery = await dbModel.getArticleCount({classify: 1});
     const file = await calculateDirectorySize(process.cwd() + '/data/files');
     const diary = await dbModel.getDiaryCount();
+    const resource = await dbModel.getResourceCount(-2,'');
     let fileSize = '';
     if((file/1024/1024)<1) {//如果数据小于1MB
       fileSize = (file/1024).toFixed(2) + 'KB';
@@ -19,7 +20,8 @@ export const getOverview = async (req, res) => {
       article: articlecount[0].count,
       gallery: gallery[0].count,
       file: fileSize,
-      diary: diary[0].count
+      diary: diary[0].count,
+      resource: resource[0].count
     }
     res.json({ code: 200, data });
   } catch (error) {
