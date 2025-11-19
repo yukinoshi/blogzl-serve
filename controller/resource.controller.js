@@ -32,9 +32,10 @@ export const deleteResourceById = async (req, res) => {
 /** 根据id获取资源 */
 export const getResourceById = async (req, res) => {
   try {
-    const { id } = req.query;
+    const { id } = req.body;
     const result = await dbModel.getResourceById(id);
-    res.send({ code: 200, data: result[0] });
+    const img = await dbModel.getFileByUrl(result[0].cover);
+    res.send({ code: 200, data: { ...result[0], coverId: img[0].id } });
   } catch (error) {
     console.error('getResourceById error:', error);
     res.send({ code: 500, message: '获取资源失败' });
@@ -56,8 +57,8 @@ export const insertResource = async (req, res) => {
       format,
       url
     }
-    const res = await dbModel.insertResource(data);
-    res.send({ code: 200, data: res.insertId });
+    const result = await dbModel.insertResource(data);
+    res.send({ code: 200, data: result.insertId });
   } catch (error) {
     console.error('insertResource error:', error);
     res.send({ code: 500, message: '插入资源失败' });
@@ -78,7 +79,7 @@ export const updateResourceById = async (req, res) => {
       format,
       url
     }
-    const res = await dbModel.updateResourceById(id,data);
+    const result = await dbModel.updateResourceById(id,data);
     res.send({ code: 200 });
   } catch (error) {
     console.error('updateResourceById error:', error);

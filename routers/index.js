@@ -212,6 +212,10 @@ export default (app) => {
   app.post('/insertresource', (req, res) => {
     serve.insertResource(req, res)
   })
+
+  app.post('/updateresource', (req, res) => {
+    serve.updateResourceById(req, res)
+  })
 }
 
 

@@ -99,3 +99,15 @@ export const deleteFileById = async (req, res) => {
     res.send({ code: 500, message: '删除文件失败' })
   }
 }
+
+/** 根据url获取图片id */
+export const getFileByUrl = async (req, res) => {
+  try {
+    const { url } = req.body;
+    const result = await dbModel.getFileByUrl(url);
+    res.send({ code: 200, data: result[0] });
+  } catch (error) {
+    console.error('getFileByUrl error:', error);
+    res.send({ code: 500, message: '获取资源失败' });
+  }
+}

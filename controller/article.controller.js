@@ -194,6 +194,10 @@ export const getArticleById = async (req, res) => {
         const userPraise = await dbModel.getPraiseByUserIdAndArticleId(fingerprint, articleId)
         result[0].isPraise = userPraise.length > 0
       }
+      const img = await dbModel.getFileByUrl(result[0].cover)
+      if (img.length > 0) {
+        result[0].coverId = img[0].id
+      }
       // 兼容旧数据，如果解析失败则保持原样（可能是单个字符串）
       try {
         result[0].label = JSON.parse(result[0].label)

@@ -81,3 +81,8 @@ export const getFileById = (id) => {
     return query(sql, id)
   }
 }
+/** 根据文件url获取文件 */
+export const getFileByUrl = (url) => {
+  let sql = 'SELECT * FROM file WHERE url = ?;'
+  return query(sql, [url])
+}
