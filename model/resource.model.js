@@ -80,3 +80,10 @@ export const updateResourceById = (id, data) => {
   let sql = 'UPDATE resource SET ? WHERE id = ?;'
   return query(sql, [data, id]);
 }
+/**
+ * 增加下载次数
+ */
+export const addResourceDownloadNum = (id) => {
+  const sql = 'UPDATE resource SET downloads = downloads + 1 WHERE id = ?;';
+  return query(sql, [id]);
+}

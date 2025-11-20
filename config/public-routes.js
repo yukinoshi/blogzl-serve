@@ -24,4 +24,5 @@ export default [
   '/gainDiaryDate',
   '/sendMessage',
   '/resource',
+  '/downloadresource',
 ]

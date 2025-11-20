@@ -9,7 +9,7 @@ export { getFileCount, getFilePage, moveFileSubset, insertFile, deleteFileById, 
 export { getDiaryPage, deleteDiaryById, insertDiary, updateDiary, getDiaryById, getDiaryCount } from './diary.model.js'
 export { insertVisit, getVisitCount } from './visits.model.js'
 export { getBannerImages } from './bannerimage.model.js'
-export { getResourcePage, getResourceCount, deleteResourceById, getResourceById, insertResource, updateResourceById } from './resource.model.js'
+export { getResourcePage, getResourceCount, deleteResourceById, getResourceById, insertResource, updateResourceById, addResourceDownloadNum } from './resource.model.js'
 
 import * as user from './user.model.js'
 import * as comment from './comment.model.js'

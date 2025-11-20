@@ -35,7 +35,10 @@ export const getResourceById = async (req, res) => {
     const { id } = req.body;
     const result = await dbModel.getResourceById(id);
     const img = await dbModel.getFileByUrl(result[0].cover);
-    res.send({ code: 200, data: { ...result[0], coverId: img[0].id } });
+    if (img.length > 0) {
+      result[0].coverId = img[0].id
+    }
+    res.send({ code: 200, data: { ...result[0] } });
   } catch (error) {
     console.error('getResourceById error:', error);
     res.send({ code: 500, message: '获取资源失败' });
@@ -79,10 +82,21 @@ export const updateResourceById = async (req, res) => {
       format,
       url
     }
-    const result = await dbModel.updateResourceById(id,data);
+    const result = await dbModel.updateResourceById(id, data);
     res.send({ code: 200 });
   } catch (error) {
     console.error('updateResourceById error:', error);
     res.send({ code: 500, message: '更新资源失败' });
+  }
+}
+/** 根据id增加资源下载次数 */
+export const addResourceDownloadNum = async (req, res) => {
+  try {
+    const { id } = req.body;
+    await dbModel.addResourceDownloadNum(id);
+    res.send({ code: 200 });
+  } catch (error) {
+    console.error('addResourceDownloadNum error:', error);
+    res.send({ code: 500, message: '增加下载次数失败' });
   }
 }

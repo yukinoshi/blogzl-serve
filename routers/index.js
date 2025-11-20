@@ -216,6 +216,10 @@ export default (app) => {
   app.post('/updateresource', (req, res) => {
     serve.updateResourceById(req, res)
   })
+
+  app.post('/downloadresource', (req, res) => {
+    serve.addResourceDownloadNum(req, res)
+  })
 }
 
 

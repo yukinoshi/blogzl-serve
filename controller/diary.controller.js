@@ -12,12 +12,6 @@ export const getDiaryPage = async (req, res) => {
       const countTemp = await dbModel.getDiaryCount(serchTerm)
       count = countTemp[0].count
     }
-    if (result.length > 0) {
-      for (const item of result) {
-        const picture = item.picture ? JSON.parse(item.picture) : []
-        item.picture = picture
-      }
-    }
     res.send({ code: 200, data: { count, list: result } })
   } catch (error) {
     console.error('getDiaryPage error:', error)
@@ -47,7 +41,7 @@ export const insertDiary = async (req, res) => {
     const { value: { title, content, picture, weather_id, moment } } = req.body
     if (title == undefined || content == undefined || picture == undefined || weather_id == undefined || moment == undefined)
       return res.send({ code: 400, message: 'insertLabel参数错误' })
-    const result = await dbModel.insertDiary({title, content, picture: JSON.stringify(picture), weather_id, moment})
+    const result = await dbModel.insertDiary({title, content, picture: picture, weather_id, moment})
     res.send({ code: 200, data: result.insertId })
   } catch (error) {
     console.error('insertDiary error:', error)
