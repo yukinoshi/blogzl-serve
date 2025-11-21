@@ -11,12 +11,12 @@ const normalizeLabel = (label) => {
 /** 获取文章或者图库分页 */
 export const getArticlePage = async (req, res) => {
   try {
-    let count = undefined, countUnpublish = undefined
-    const { pageSize = 10, nowPage = 1, state = -1, subsetId = -2, serchTerm = '', classify = 0 } = req.body
+    let countnum = undefined, countUnpublish = undefined
+    const { count = true, pageSize = 10, nowPage = 1, state = -1, subsetId = -2, serchTerm = '', classify = 0 } = req.body
     const result = await dbModel.getArticlePage({ pageSize: Number(pageSize), nowPage: Number(nowPage), state: Number(state), subsetId: Number(subsetId), serchTerm, classify })
-    if (req.body.count) {
+    if (count) {
       const countTemp = await dbModel.getArticleCount({ state: Number(state), subsetId: Number(subsetId), serchTerm, classify })
-      count = countTemp[0].count
+      countnum = countTemp[0].count
       if (classify === 0) {
         //没有发布的文章数量
         const unpublishTemp = await dbModel.getArticleCount({ state: 0, subsetId: Number(subsetId), serchTerm, classify })
@@ -50,7 +50,7 @@ export const getArticlePage = async (req, res) => {
         }
       }
     }
-    res.send({ code: 200, data: { count, countUnpublish, list: result } })
+    res.send({ code: 200, data: { count: countnum, countUnpublish, list: result } })
   } catch (error) {
     console.error('getArticlePage error:', error)
     res.send({ code: 500, message: '获取文章失败' })

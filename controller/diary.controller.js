@@ -5,14 +5,14 @@ import dbModel from '../model/db_model.js'
 */
 export const getDiaryPage = async (req, res) => {
   try {
-    let count = undefined
-    const { pageSize = 10, nowPage = 1, serchTerm = '' } = req.body
+    let countnum = undefined
+    const { count = true, pageSize = 10, nowPage = 1, serchTerm = '' } = req.body
     const result = await dbModel.getDiaryPage(Number(pageSize), Number(nowPage), serchTerm)
-    if (req.body.count) {
+    if (count) {
       const countTemp = await dbModel.getDiaryCount(serchTerm)
-      count = countTemp[0].count
+      countnum = countTemp[0].count
     }
-    res.send({ code: 200, data: { count, list: result } })
+    res.send({ code: 200, data: { count: countnum, list: result } })
   } catch (error) {
     console.error('getDiaryPage error:', error)
     res.send({ code: 500, data: '获取日记失败' })

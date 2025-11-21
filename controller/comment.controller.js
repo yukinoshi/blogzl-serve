@@ -103,3 +103,14 @@ export const submitComment = async (req, res) => {
     res.send({ code: 500, message: '新增评论失败' })
   }
 }
+/** 举报评论 */
+export const reportCommentById = async (req, res) => {
+  try {
+    const { id } = req.body
+    const result = await dbModel.reportCommentById(id)
+    res.send({ code: 200 })
+  } catch (error) {
+    console.error('reportCommentById error:', error)
+    res.send({ code: 500, message: '举报评论失败' })
+  }
+}

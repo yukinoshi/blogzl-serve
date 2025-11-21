@@ -49,6 +49,10 @@ export default (app) => {
     serve.submitComment(req, res)
   })
 
+  app.post('/reportcomment', (req, res) => {
+    serve.reportCommentById(req, res)
+  })
+
   app.post('/message', (req, res) => {
     serve.getMessagePage(req, res)
   })

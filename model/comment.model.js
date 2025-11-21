@@ -68,3 +68,11 @@ export const insertComment = (obj) => {
   let sql = 'INSERT INTO comment SET ?;'
   return query(sql, obj)
 }
+
+/**
+ * 举报评论
+ */
+export const reportCommentById = (id) => {
+  let sql = 'UPDATE comment SET complaint = complaint + 1 WHERE id = ?;'
+  return query(sql, [id])
+}
