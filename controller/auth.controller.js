@@ -79,3 +79,37 @@ export const verify = async (req, res) => {
     return res.status(401).send({ code: 401, message: isExpired ? 'Token expired' : 'Invalid token' })
   }
 }
+
+/** 修改密码 */
+export const changePassword = async (req, res) => {
+  try {
+    const { id, oldPassword, newPassword } = req.body
+    const result = await dbModel.getUserById({ id })
+    if (result.length === 0) {
+      return res.send({ code: 400, message: '用户不存在' })
+    }
+    const user = result[0]
+    const match = await hash.comparePassword(oldPassword || '', user.password)
+    if (!match) {
+      return res.send({ code: 400, message: '旧密码错误' })
+    }
+    const hashedNewPassword = await hash.hashPassword(newPassword)
+    await dbModel.changePassword({ id, newPassword: hashedNewPassword })
+    res.send({ code: 200 })
+  } catch (error) {
+    console.error('changePassword error:', error)
+    res.send({ code: 500, message: '修改密码失败' })
+  }
+}
+
+/** 修改用户名 */
+export const changeUserName = async (req, res) => {
+  try {
+    const { id, newName } = req.body
+    await dbModel.changeUserName({ id, newName })
+    res.send({ code: 200 })
+  } catch (error) {
+    console.error('changeUserName error:', error)
+    res.send({ code: 500, message: '修改用户名失败' })
+  }
+}

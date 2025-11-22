@@ -21,6 +21,14 @@ export default (app) => {
     serve.verify(req, res)
   })
 
+  app.post('/changePassword', (req, res) => {
+    serve.changePassword(req, res)
+  })
+
+  app.post('/changeUserName', (req, res) => {
+    serve.changeUserName(req, res)
+  })
+
   app.post('/comment', (req, res) => {
     serve.getCommentPage(req, res)
   })
@@ -195,6 +203,10 @@ export default (app) => {
 
   app.post('/recordVisit', (req, res) => {
     serve.recordVisit(req, res)
+  })
+
+  app.post('/visitsStats', (req, res) => {
+    serve.getVisitsStats(req, res)
   })
 
   app.post('/banner', (req, res) => {

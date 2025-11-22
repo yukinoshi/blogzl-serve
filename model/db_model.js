@@ -1,4 +1,4 @@
-export { isRegister, insertUser, login } from './user.model.js'
+export { isRegister, insertUser, login, changePassword, changeUserName } from './user.model.js'
 export { getCommentPage, commentCount, commentIsread, getArticleTitleById, deleteCommentById, insertComment, reportCommentById } from './comment.model.js'
 export { getMessagePage, getMessageCount, messageIsread, deleteMessageById, getUnreadMessageCount, insertMessage } from './message.model.js'
 export { getArticlePage, getAllarticle, getAllArticleby, getArticleCount, changeArticleState, insertArticle, deleteArticleById, getArticleById, updateArticleById } from './article.model.js'
@@ -7,7 +7,7 @@ export { getSubset, insertSubset, updateSubset, deleteSubsetById, getSubsetById 
 export { getLabel, insertLabel, deleteLabel } from './label.model.js'
 export { getFileCount, getFilePage, moveFileSubset, insertFile, deleteFileById, getFileById } from './file.model.js'
 export { getDiaryPage, deleteDiaryById, insertDiary, updateDiary, getDiaryById, getDiaryCount } from './diary.model.js'
-export { insertVisit, getVisitCount } from './visits.model.js'
+export { insertVisit, getVisitCount, getVisitsStats } from './visits.model.js'
 export { getBannerImages } from './bannerimage.model.js'
 export { getResourcePage, getResourceCount, deleteResourceById, getResourceById, insertResource, updateResourceById, addResourceDownloadNum } from './resource.model.js'
 

@@ -18,3 +18,9 @@ export const getVisitCount = (fromTime) => {
   const sql = 'SELECT COUNT(*) AS count FROM visits;'
   return query(sql)
 }
+
+/** 获取一周内每天的访问次数或者一个月内每天的访问次数 */
+export const getVisitsStats = (fromTime) => {
+  const sql = `SELECT DATE(visit_time) AS date, COUNT(*) AS count FROM visits WHERE visit_time >= ? GROUP BY DATE(visit_time) ORDER BY DATE(visit_time) ASC;`
+  return query(sql, [fromTime])
+}

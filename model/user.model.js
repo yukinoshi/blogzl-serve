@@ -25,3 +25,17 @@ export const getUserById = (value) => {
   const id = value && value.id ? value.id : ''
   return query(sql, [id])
 }
+
+/** 更新用户密码 */
+export const changePassword = (value) => {
+  let sql = 'UPDATE users SET password = ? WHERE id = ?;'
+  const { id, newPassword } = value
+  return query(sql, [newPassword, id])
+}
+
+/** 更新用户名称 */
+export const changeUserName = (value) => {
+  let sql = 'UPDATE users SET name = ? WHERE id = ?;'
+  const { id, newName } = value
+  return query(sql, [newName, id])
+}
