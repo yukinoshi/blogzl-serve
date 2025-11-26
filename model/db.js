@@ -1,12 +1,12 @@
 import mysql from 'mysql'
 import config from '../config/default.js'
-
+const Mysqlconfig = config.Mysqlconfig
 const pool = mysql.createPool({
   connectionLimit: 10,
-  host: config.database.HOST,
-  user: config.database.USERNAME,
-  password: config.database.PASSWORD,
-  database: config.database.DATABASE
+  host: Mysqlconfig.database.HOST,
+  user: Mysqlconfig.database.USERNAME,
+  password: Mysqlconfig.database.PASSWORD,
+  database: Mysqlconfig.database.DATABASE
 })
 //统一执行sql的函数
 let query = (sql, values) => {

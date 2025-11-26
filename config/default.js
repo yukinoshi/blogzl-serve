@@ -1,4 +1,4 @@
-const config = {
+const Mysqlconfig = {
   port: 3000,
   database: {
     HOST: 'localhost',
@@ -7,6 +7,20 @@ const config = {
     USERNAME: 'root',
     PASSWORD: '123456'
   }
+}
+
+const RedisConfig = {
+  port: 3001,
+  redis: {
+    host: 'localhost',
+    port: 6379,
+    password: ''
+  }
+}
+
+const config = {
+  Mysqlconfig,
+  RedisConfig
 }
 
 export default config

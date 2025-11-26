@@ -62,9 +62,9 @@ router(app)
 
 // 明确绑定到 127.0.0.1，输出更详细的启动日志，便于确认监听状态
 const host = process.env.HOST || '127.0.0.1'
-const server = app.listen(config.port, host, () => {
+const server = app.listen(config.Mysqlconfig.port, host, () => {
   console.log(`[serve] PID: ${process.pid}`)
-  console.log(`[serve] Listening on http://${host}:${config.port}`)
+  console.log(`[serve] Listening on http://${host}:${config.Mysqlconfig.port}`)
 })
 server.on('error', (err) => {
   console.error('[serve:error]', err?.message || err)
