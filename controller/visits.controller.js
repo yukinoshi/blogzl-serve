@@ -19,7 +19,7 @@ const getAndInitCounts = async () => {
   // 如果数据缺失，则回源到数据库查询
   if (total === null || today === null) {
     const todayStart = dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss')
-    // 并行查询数据库
+
     const [totalResult, todayResult] = await Promise.all([
       dbModel.getVisitCount(),
       dbModel.getVisitCount(todayStart),
@@ -28,13 +28,12 @@ const getAndInitCounts = async () => {
     const dbTotal = totalResult[0]?.count || 0
     const dbToday = todayResult[0]?.count || 0
 
-    // 写入Redis(如果 Redis 里是 null 才写入，避免覆盖)
     if (total === null) {
       await redis.set(TOTAL_VISITS_KEY, dbTotal)
       total = dbTotal
     }
     if (today === null) {
-      // 今日访问量设置 24小时+缓冲期 过期，避免垃圾数据堆积
+      //今日缓存有效期为25小时，防止跨天访问量统计错误
       await redis.setex(todayKey, 60 * 60 * 25, dbToday)
       today = dbToday
     }
@@ -46,30 +45,25 @@ const getAndInitCounts = async () => {
   }
 }
 
-/** 记录访问次数 */
-// 访问量统计不区分文章/页面，仅做简单的访问计数 然后分别输出总的访问量和今日访问量
+/** 记录网站访问次数 */
 export const recordVisit = async (req, res) => {
   try {
     const now = dayjs()
     const todayStr = now.format('YYYY-MM-DD')
     const todayKey = TODAY_VISITS_KEY_PREFIX + todayStr
 
-    // 从请求中提取 IP（优先 X-Forwarded-For，然后 req.ip，再回退到连接地址）
     const forwarded = req.headers['x-forwarded-for'] || req.headers['X-Forwarded-For']
     const ip = (typeof forwarded === 'string' && forwarded.split(',')[0].trim()) || req.ip || req.connection?.remoteAddress || ''
 
-    // 写入数据库
     dbModel.insertVisit({ visit_time: now.format('YYYY-MM-DD HH:mm:ss'), ip })
 
     // 计数器自增
-    // 如果 key 不存在，incr 会自动将其初始化为 0 再 +1，但为了保证基数正确，我们先检查初始化
     const exists = await redis.exists(TOTAL_VISITS_KEY)
     if (!exists) {
       // 如果 Redis 没数据，先初始化一遍
       await getAndInitCounts()
     }
 
-    // 执行自增
     const [newTotal, newToday] = await Promise.all([
       redis.incr(TOTAL_VISITS_KEY),
       redis.incr(todayKey)

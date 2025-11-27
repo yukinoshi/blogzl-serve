@@ -1,7 +1,7 @@
 export { isRegister, insertUser, login, changePassword, changeUserName } from './user.model.js'
 export { getCommentPage, commentCount, commentIsread, getArticleTitleById, deleteCommentById, insertComment, reportCommentById } from './comment.model.js'
 export { getMessagePage, getMessageCount, messageIsread, deleteMessageById, getUnreadMessageCount, insertMessage } from './message.model.js'
-export { getArticlePage, getAllarticle, getAllArticleby, getArticleCount, changeArticleState, insertArticle, deleteArticleById, getArticleById, updateArticleById } from './article.model.js'
+export { getArticlePage, getAllarticle, getAllArticleby, getArticleCount, changeArticleState, insertArticle, deleteArticleById, getArticleById, updateArticleById, addArticleViews } from './article.model.js'
 export { insertPraise, getPraiseCountByArticleId, getPraiseByUserIdAndArticleId, getPraiseByUserId, deletePraiseByUserId, insertPraiseComment, getPraiseCountByCommentId, getCommentPraiseByUserId, deleteCommentPraiseByUserId, getPraiseByUserIdAndCommentId } from './praise.model.js'
 export { getSubset, insertSubset, updateSubset, deleteSubsetById, getSubsetById } from './subset.model.js'
 export { getLabel, insertLabel, deleteLabel } from './label.model.js'

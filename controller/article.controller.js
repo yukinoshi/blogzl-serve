@@ -1,4 +1,5 @@
 import dbModel from '../model/db_model.js'
+import redis from '../model/redis.js'
 
 // 规范化标签：确保写库时始终为 JSON 字符串数组
 const normalizeLabel = (label) => {
@@ -8,11 +9,40 @@ const normalizeLabel = (label) => {
   return JSON.stringify([label])
 }
 
+// 生成文章列表的 Redis Key
+const getArticleredisKey = (params) => {
+  const { state, subsetId, pageSize, nowPage, classify } = params
+  return `blog:article:list:${classify}:${subsetId}:${state}:${nowPage}:${pageSize}`
+}
+
+// 清除文章列表缓存
+const clearArticleListCache = async () => {
+  try {
+    const keys = await redis.keys('blog:article:list:*')
+    if (keys.length > 0) {
+      await redis.del(keys)
+    }
+  } catch (error) {
+    console.error('清除缓存失败:', error)
+  }
+}
+
 /** 获取文章或者图库分页 */
 export const getArticlePage = async (req, res) => {
   try {
-    let countnum = undefined, countUnpublish = undefined
+    let countnum = undefined, countUnpublish = undefined, rediskey = '';
     const { count = true, pageSize = 10, nowPage = 1, state = -1, subsetId = -2, serchTerm = '', classify = 0 } = req.body
+    if (!serchTerm) { //没有搜索词的时候直接尝试获取缓存
+      rediskey = getArticleredisKey({ state: Number(state), subsetId: Number(subsetId), pageSize: Number(pageSize), nowPage: Number(nowPage), classify: Number(classify) })
+      try {
+        const redisData = await redis.get(rediskey)
+        if (redisData) { //有缓存则直接返回
+          return res.send(JSON.parse(redisData))
+        }
+      } catch (error) {
+        console.error('getArticlePage redis get error:', error)
+      }
+    }
     const result = await dbModel.getArticlePage({ pageSize: Number(pageSize), nowPage: Number(nowPage), state: Number(state), subsetId: Number(subsetId), serchTerm, classify })
     if (count) {
       const countTemp = await dbModel.getArticleCount({ state: Number(state), subsetId: Number(subsetId), serchTerm, classify })
@@ -50,12 +80,17 @@ export const getArticlePage = async (req, res) => {
         }
       }
     }
-    res.send({ code: 200, data: { count: countnum, countUnpublish, list: result } })
+    const responseData = { code: 200, data: { count: countnum, countUnpublish, list: result } }
+    if (!serchTerm) { //没有搜索词的时候写缓存
+      await redis.set(rediskey, JSON.stringify(responseData), 'EX', 300)
+    }
+    res.send(responseData)
   } catch (error) {
     console.error('getArticlePage error:', error)
     res.send({ code: 500, message: '获取文章失败' })
   }
 }
+
 /** 获取全部文章/图库列表 */
 export const getAllarticle = async (req, res) => {
   try {
@@ -141,6 +176,7 @@ export const changeArticleState = async (req, res) => {
     if (state === undefined || articleId === undefined)
       return res.send({ code: 400, message: 'changeArticleState参数错误' })
     await dbModel.changeArticleState(Number(articleId), Number(state))
+    await clearArticleListCache()
     res.send({ code: 200 })
   } catch (error) {
     console.error('changeArticleState error:', error)
@@ -153,6 +189,7 @@ export const deleteArticle = async (req, res) => {
   try {
     const { articleId } = req.body
     await dbModel.deleteArticleById(Number(articleId))
+    await clearArticleListCache()
     res.send({ code: 200 })
   } catch (error) {
     console.error('deleteArticle error:', error)
@@ -204,8 +241,14 @@ export const getArticleById = async (req, res) => {
       } catch {
         result[0].label = [result[0].label]
       }
-      //观看views+1
-      await dbModel.updateArticleViewsById(Number(articleId))
+      // 浏览量处理：Redis 自增 + 延迟写入
+      const viewKey = `blog:article:view:${articleId}`
+      await redis.incr(viewKey)
+      // 获取当前未同步的浏览量
+      const cachedViews = await redis.get(viewKey)
+      // 实时浏览量 = 数据库值 + 缓存增量
+      result[0].views += Number(cachedViews || 0)
+
       res.send({ code: 200, data: result[0] })
     } else {
       res.send({ code: 404, message: '文章不存在' })
@@ -234,6 +277,7 @@ export const updateArticleById = async (req, res) => {
       state
     }
     await dbModel.updateArticleById(Number(id), data)
+    await clearArticleListCache()
     res.send({ code: 200 })
   } catch (error) {
     console.error('updateArticleById error:', error)
@@ -261,10 +305,32 @@ export const insertArticle = async (req, res) => {
       moment
     }
     const result = await dbModel.insertArticle(data)
+    await clearArticleListCache()
     res.send({ code: 200, data: result.insertId })
   } catch (error) {
     console.error('insertArticle error:', error)
     res.send({ code: 500, message: '新增文章失败' })
   }
 }
+
+// 定时同步文章浏览量到数据库 (每 1 分钟)
+setInterval(async () => {
+  try {
+    const keys = await redis.keys('blog:article:view:*')
+    if (keys.length === 0) return
+
+    for (const key of keys) {
+      const id = key.split(':').pop()
+      // 原子性获取并清零 Redis 计数
+      const count = await redis.getset(key, 0)
+      
+      // 如果有新增浏览量，则同步到数据库
+      if (Number(count) > 0) {
+        await dbModel.addArticleViews(Number(id), Number(count))
+      }
+    }
+  } catch (error) {
+    console.error('同步文章浏览量失败:', error)
+  }
+}, 60 * 1000)
 

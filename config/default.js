@@ -1,5 +1,4 @@
 const Mysqlconfig = {
-  port: 3000,
   database: {
     HOST: 'localhost',
     PORT: 3306,
@@ -10,7 +9,6 @@ const Mysqlconfig = {
 }
 
 const RedisConfig = {
-  port: 3001,
   redis: {
     host: 'localhost',
     port: 6379,
@@ -19,6 +17,7 @@ const RedisConfig = {
 }
 
 const config = {
+  port: 3000,
   Mysqlconfig,
   RedisConfig
 }
