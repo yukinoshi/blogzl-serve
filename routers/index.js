@@ -17,6 +17,14 @@ export default (app) => {
     serve.login(req, res)
   })
 
+  app.post('/refreshToken', (req, res) => {
+    serve.refreshToken(req, res)
+  })
+
+  app.post('/logout', (req, res) => {
+    serve.logout(req, res)
+  })
+
   app.get('/verify', (req, res) => {
     serve.verify(req, res)
   })

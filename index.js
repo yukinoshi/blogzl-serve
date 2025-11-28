@@ -1,4 +1,5 @@
 import express from 'express'
+import cookieParser from 'cookie-parser'
 import config from './config/default.js'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
@@ -23,6 +24,7 @@ const app = express()
 //   }
 // }
 
+app.use(cookieParser())
 app.use(express.json())
 // 静态资源：/files 与 /weather 都公开可访问；其余 data 下资源也公开
 app.use('/files', express.static(join(__dirname, 'data', 'files')))
@@ -30,11 +32,15 @@ app.use('/weather', express.static(join(__dirname, 'data', 'weather')))
 app.use(express.static(join(__dirname, 'data')))
 //跨域
 app.use('/', (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*')
+  const origin = req.headers.origin
+  if (origin) {
+    res.header('Access-Control-Allow-Origin', origin)
+  }
+  res.header('Access-Control-Allow-Credentials', 'true')
   res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With')
   res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
-  if (req.method === 'OPTIONS') res.send(200) //让options请求快速返回
-  else next()
+  if (req.method === 'OPTIONS') return res.sendStatus(204)
+  next()
 })
 
 // 统一验证token的中间件

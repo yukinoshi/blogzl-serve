@@ -2,6 +2,8 @@
 // 直接写路径（与 req.path 完全匹配）
 export default [
   '/login',
+  '/refreshToken',
+  '/logout',
   '/insertUser',
   '/isRegister',
   '/verify',
