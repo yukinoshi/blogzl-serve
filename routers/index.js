@@ -244,6 +244,10 @@ export default (app) => {
   app.post('/downloadresource', (req, res) => {
     serve.addResourceDownloadNum(req, res)
   })
+
+  app.post('/aireply', (req, res) => {
+    serve.getAiReply(req, res)
+  })
 }
 
 

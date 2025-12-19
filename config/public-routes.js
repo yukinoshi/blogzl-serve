@@ -28,4 +28,5 @@ export default [
   '/resource',
   '/downloadresource',
   '/reportcomment',
+  '/aireply',
 ]

@@ -20,6 +20,7 @@
     "ioredis": "^5.8.2",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "openai": "^6.14.0"
   }
 }

@@ -11,6 +11,7 @@ import * as overview from './overview.controller.js'
 import * as visits from './visits.controller.js'
 import * as banner from './banner.controller.js'
 import * as resource from './resource.controller.js'
+import * as ai from './Ai.controller.js'
 
 export default {
   ...user,
@@ -26,4 +27,5 @@ export default {
   ...overview,
   ...visits,
   ...resource,
+  ...ai
 }
