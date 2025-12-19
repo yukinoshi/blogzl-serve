@@ -20,7 +20,8 @@ const config = {
   port: 3000,
   Mysqlconfig,
   RedisConfig,
-  AiapiKey: 'xxxxxxxxxxxxxxxxxxx' // 请替换为你的AI接口Key
+  AiapiKey: 'xxxxxxx', // 请替换为你的AI接口Key
+  AiVersion: 'v1', // 当前AI接口版本号，用于缓存区分
 }
 
 export default config

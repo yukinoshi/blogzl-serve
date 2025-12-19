@@ -1,5 +1,6 @@
 import dbModel from '../model/db_model.js'
 import redis from '../model/redis.js'
+import config from '../config/default.js'
 
 // 规范化标签：确保写库时始终为 JSON 字符串数组
 const normalizeLabel = (label) => {
@@ -24,6 +25,42 @@ const clearArticleListCache = async () => {
     }
   } catch (error) {
     console.error('清除缓存失败:', error)
+  }
+}
+
+// 返回非当前版本的 summary keys 列表
+async function getOtherAiSummaryKeys(currentVersion) {
+  const pattern = 'ai:*:article:summary:*';
+  const otherKeys = [];
+  let cursor = '0';
+  do {
+    const [nextCursor, keys] = await redis.scan(cursor, 'MATCH', pattern, 'COUNT', 200);
+    cursor = nextCursor;
+    for (const k of keys) {
+      // key 形如 ai:v1:article:summary:123
+      const parts = k.split(':');
+      const version = parts[1];
+      if (version !== currentVersion) {
+        otherKeys.push(k);
+      }
+    }
+  } while (cursor !== '0');
+  return otherKeys;
+}
+
+// 清除文章摘要缓存
+const clearArticleSummaryCache = async (articleId) => {
+  try {
+    const key = `ai:${config.AiVersion}:article:summary:${articleId}`
+    await redis.del(key)
+    //清除不是当前版本所有的ai缓存
+    const keys = await getOtherAiSummaryKeys(config.AiVersion);
+    if (keys.length === 0) return;
+    const pipeline = redis.pipeline();
+    keys.forEach(k => pipeline.unlink(k));
+    await pipeline.exec();
+  } catch (error) {
+    console.error('清除文章摘要缓存失败:', error)
   }
 }
 
@@ -278,6 +315,7 @@ export const updateArticleById = async (req, res) => {
     }
     await dbModel.updateArticleById(Number(id), data)
     await clearArticleListCache()
+    await clearArticleSummaryCache(id)
     res.send({ code: 200 })
   } catch (error) {
     console.error('updateArticleById error:', error)
@@ -323,7 +361,7 @@ setInterval(async () => {
       const id = key.split(':').pop()
       // 原子性获取并清零 Redis 计数
       const count = await redis.getset(key, 0)
-      
+
       // 如果有新增浏览量，则同步到数据库
       if (Number(count) > 0) {
         await dbModel.addArticleViews(Number(id), Number(count))

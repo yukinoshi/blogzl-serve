@@ -6,6 +6,12 @@ const openai = new OpenAI({
   apiKey: config.AiapiKey,
   baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
 });
+
+// 生成文章总结列表的 Redis Key
+const getSummaryisKey = (params) => {
+  const { articleId } = params;
+  return `ai:${config.AiVersion}:article:summary:${articleId}`;
+}
 //消息和返回函数
 const streamReply = async (message, callback) => {
   const stream = await openai.chat.completions.create({
@@ -26,7 +32,7 @@ const streamReply = async (message, callback) => {
 }
 
 export const getAiReply = async (req, res) => {
-const { message } = req.body;
+  const { message, articleId } = req.body;
   // 1) 一次性写头
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
@@ -36,15 +42,26 @@ const { message } = req.body;
   const writeSSE = (data) => res.write(data);
 
   try {
-    await streamReply(message, async (stream) => {
-      for await (const chunk of stream) {
-        const token = chunk.choices?.[0]?.delta?.content || "";
-        if (token) {
-          writeSSE(token); // 持续推送
+    const rediskey = getSummaryisKey({ articleId })
+    const redisData = await redis.get(rediskey)
+    if (redisData) {
+      writeSSE(redisData);
+      return res.end();
+    } else {
+      let responseData;
+      await streamReply(message, async (stream) => {
+        for await (const chunk of stream) {
+          const token = chunk.choices?.[0]?.delta?.content || "";
+          if (token) {
+            writeSSE(token); // 持续推送
+            responseData = (responseData || "") + token;
+          }
         }
-      }
-      res.end();
-    });
+        // 将结果存入 Redis，不设置过期时间
+        redis.set(rediskey, JSON.stringify(responseData))
+        res.end();
+      })
+    };
   } catch (err) {
     console.error(err);
     writeSSE(JSON.stringify({ error: 'Failed to get AI reply' }));
